@@ -74,10 +74,10 @@
                                     <a href="{{ route('admin.produk.edit', $product->id) }}" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
                                         Edit
                                     </a>
-                                    <form method="POST" action="{{ route('admin.produk.destroy', $product->id) }}" class="inline-block">
+                                    <form method="POST" action="{{ route('admin.produk.destroy', $product->id) }}" class="inline-block" onsubmit="event.preventDefault(); confirmDelete(this, 'produk {{ addslashes($product->name) }}');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Hapus produk ini?')" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
+                                        <button type="submit" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
                                             Hapus
                                         </button>
                                     </form>

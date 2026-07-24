@@ -38,10 +38,10 @@
                                     <a href="{{ route('admin.kategori.edit', $category->id) }}" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
                                         Edit
                                     </a>
-                                    <form method="POST" action="{{ route('admin.kategori.destroy', $category->id) }}" class="inline-block">
+                                    <form method="POST" action="{{ route('admin.kategori.destroy', $category->id) }}" class="inline-block" onsubmit="event.preventDefault(); confirmDelete(this, 'kategori {{ addslashes($category->name) }}');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Hapus kategori ini?')" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
+                                        <button type="submit" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
                                             Hapus
                                         </button>
                                     </form>

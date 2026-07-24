@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <!-- Stock & Image Grid -->
+            <!-- Stock & Image Cropper Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label for="stock" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Stok Awal <span class="text-rose-500">*</span></label>
@@ -59,12 +59,33 @@
                 </div>
 
                 <div>
-                    <label for="image" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Gambar Produk (Max 2MB)</label>
+                    <label for="image" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                        Foto Produk (Image Cropper 1:1)
+                    </label>
                     <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg"
+                        onchange="triggerImageCropper(this, 'cropped-preview-img')"
                         class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
                     @error('image')
                         <p class="text-xs text-rose-400 mt-1 font-semibold">{{ $message }}</p>
                     @enderror
+                </div>
+            </div>
+
+            <!-- Cropped Image Live Preview -->
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-4">
+                <div class="w-20 h-20 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center flex-shrink-0">
+                    <img id="cropped-preview-img" class="w-full h-full object-cover hidden">
+                    <span id="preview-placeholder" class="text-slate-600 text-xs text-center p-1">No Image</span>
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-slate-200 block">Preview Hasil Crop (1:1 Square)</span>
+                    <p class="text-[11px] text-slate-400 mt-0.5">
+                        Saat gambar dipilih, modal <strong>Image Cropper</strong> akan otomatis muncul untuk memotong foto secara presisi.
+                    </p>
+                    <button type="button" onclick="const input = document.getElementById('image'); if(input.files[0]) triggerImageCropper(input, 'cropped-preview-img');"
+                        class="mt-2 text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold px-3 py-1 rounded-lg border border-slate-700 transition">
+                        ✂️ Potong Ulang Gambar
+                    </button>
                 </div>
             </div>
 
@@ -92,4 +113,12 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById('image').addEventListener('change', function() {
+            if(this.files[0]) {
+                document.getElementById('preview-placeholder').classList.add('hidden');
+            }
+        });
+    </script>
 </x-admin-layout>

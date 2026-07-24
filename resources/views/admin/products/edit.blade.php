@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <!-- Stock & Image Grid -->
+            <!-- Stock & Image Cropper Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label for="stock" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Stok <span class="text-rose-500">*</span></label>
@@ -48,12 +48,32 @@
                 </div>
 
                 <div>
-                    <label for="image" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Ganti Gambar (Opsional)</label>
+                    <label for="image" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Ganti Gambar (Image Cropper 1:1)</label>
                     <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg"
+                        onchange="triggerImageCropper(this, 'cropped-preview-img')"
                         class="w-full text-xs text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                </div>
+            </div>
+
+            <!-- Image Preview Box (Current or Cropped) -->
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-4">
+                <div class="w-20 h-20 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center flex-shrink-0">
                     @if($product->image)
-                        <span class="text-[11px] text-slate-400 mt-1 block">Gambar saat ini: {{ basename($product->image) }}</span>
+                        <img id="cropped-preview-img" src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">
+                    @else
+                        <img id="cropped-preview-img" class="w-full h-full object-cover hidden">
+                        <span id="preview-placeholder" class="text-slate-600 text-xs text-center p-1">No Image</span>
                     @endif
+                </div>
+                <div>
+                    <span class="text-xs font-bold text-slate-200 block">Preview Foto Produk</span>
+                    <p class="text-[11px] text-slate-400 mt-0.5">
+                        Pilih foto baru untuk membuka modal <strong>Image Cropper</strong> dan menggantikan gambar saat ini.
+                    </p>
+                    <button type="button" onclick="const input = document.getElementById('image'); if(input.files[0]) triggerImageCropper(input, 'cropped-preview-img');"
+                        class="mt-2 text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold px-3 py-1 rounded-lg border border-slate-700 transition">
+                        ✂️ Potong Ulang Gambar Baru
+                    </button>
                 </div>
             </div>
 

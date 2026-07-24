@@ -86,7 +86,7 @@
                 </div>
 
                 @if(!in_array($order->status, ['selesai', 'dibatalkan']))
-                    <form method="POST" action="{{ route('admin.pesanan.update-status', $order->id) }}" class="space-y-3 pt-3 border-t border-slate-800">
+                    <form method="POST" action="{{ route('admin.pesanan.update-status', $order->id) }}" class="space-y-3 pt-3 border-t border-slate-800" onsubmit="event.preventDefault(); confirmStatusUpdate(this, this.status.value);">
                         @csrf
                         @method('PATCH')
                         <label for="status" class="block text-xs font-bold text-slate-300 uppercase">Ubah Status Order:</label>
@@ -145,20 +145,20 @@
 
                     <!-- Verification Buttons Form -->
                     <div class="pt-4 border-t border-slate-800 flex gap-3">
-                        <form method="POST" action="{{ route('admin.pesanan.verifikasi-bayar', $order->id) }}" class="flex-1">
+                        <form method="POST" action="{{ route('admin.pesanan.verifikasi-bayar', $order->id) }}" class="flex-1" onsubmit="event.preventDefault(); confirmPayment(this, 'LUNAS');">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="payment_status" value="lunas">
-                            <button type="submit" onclick="return confirm('Konfirmasi pembayaran LUNAS?')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-emerald-600/30">
+                            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-emerald-600/30">
                                 ✅ Verifikasi LUNAS
                             </button>
                         </form>
 
-                        <form method="POST" action="{{ route('admin.pesanan.verifikasi-bayar', $order->id) }}" class="flex-1">
+                        <form method="POST" action="{{ route('admin.pesanan.verifikasi-bayar', $order->id) }}" class="flex-1" onsubmit="event.preventDefault(); confirmPayment(this, 'DITOLAK');">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="payment_status" value="ditolak">
-                            <button type="submit" onclick="return confirm('TOLAK bukti pembayaran ini?')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-rose-600/30">
+                            <button type="submit" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-rose-600/30">
                                 ❌ Tolak Bayar
                             </button>
                         </form>
