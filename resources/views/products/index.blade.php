@@ -1,19 +1,98 @@
 <x-app-layout>
     <x-slot name="title">Wahyu Gadget Pedia — Toko Aksesori Gadget Terlengkap</x-slot>
 
-    <!-- Hero Banner -->
-    <div class="relative bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 mb-10 overflow-hidden shadow-2xl border border-slate-800">
-        <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="relative z-10 max-w-2xl">
-            <span class="inline-block bg-blue-500/20 text-cyan-300 border border-blue-500/30 text-xs font-semibold px-3.5 py-1 rounded-full mb-4">
-                ⚡ Aksesori Original & Garansi
-            </span>
-            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-                Wahyu Gadget Pedia
-            </h1>
-            <p class="text-slate-300 mt-3 text-base sm:text-lg">
-                Pusat belanja kebutuhan gadget terlengkap — Casing, Charger, Earphone, Powerbank & Aksesori HP berkualitas tinggi.
-            </p>
+    <!-- Animated Gadget Hero Slider (3 Banners) -->
+    <div x-data="{
+            activeSlide: 0,
+            slides: [
+                {
+                    title: 'Wahyu Gadget Pedia',
+                    badge: '⚡ Promo Aksesori Charger & Powerbank',
+                    subtitle: 'Fast Charger 65W GaN, Kabel Data Braided & Powerbank Kapasitas Besar Garansi Resmi.',
+                    image: '{{ asset('images/banner1.png') }}',
+                    link: '?category=kabel-charger'
+                },
+                {
+                    title: 'Suara Jernih & Extra Bass',
+                    badge: '🎧 Collection TWS & Headset Gaming',
+                    subtitle: 'Nikmati kualitas audio definisi tinggi dengan fitur Noise Cancelling & Bluetooth 5.3.',
+                    image: '{{ asset('images/banner2.png') }}',
+                    link: '?category=audio-earphone'
+                },
+                {
+                    title: 'Pelindung Gadget Premium',
+                    badge: '🛡️ Casing & Tempered Glass Anti-Drop',
+                    subtitle: 'Lindungi smartphone kesayangan Anda dengan Clear Case Hybrid & Tempered Glass Anti-Spy.',
+                    image: '{{ asset('images/banner3.png') }}',
+                    link: '?category=casing-pelindung'
+                }
+            ],
+            next() {
+                this.activeSlide = (this.activeSlide + 1) % this.slides.length;
+            },
+            prev() {
+                this.activeSlide = (this.activeSlide - 1 + this.slides.length) % this.slides.length;
+            },
+            timer: null
+        }"
+        x-init="timer = setInterval(() => next(), 4500)"
+        @mouseenter="clearInterval(timer)"
+        @mouseleave="timer = setInterval(() => next(), 4500)"
+        class="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-slate-800 mb-10 bg-slate-950 group">
+
+        <!-- Slide Track Wrapper -->
+        <div class="relative min-h-[280px] sm:min-h-[360px] w-full overflow-hidden">
+            <template x-for="(slide, index) in slides" :key="index">
+                <div x-show="activeSlide === index"
+                    x-transition:enter="transform transition ease-out duration-700"
+                    x-transition:enter-start="translate-x-full opacity-0"
+                    x-transition:enter-end="translate-x-0 opacity-100"
+                    x-transition:leave="transform transition ease-in duration-700"
+                    x-transition:leave-start="translate-x-0 opacity-100"
+                    x-transition:leave-end="-translate-x-full opacity-0"
+                    class="absolute inset-0 w-full h-full flex items-center justify-between p-8 sm:p-12">
+                    
+                    <!-- Background Banner Image with Dark Overlay -->
+                    <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover opacity-45 mix-blend-luminosity">
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent"></div>
+
+                    <!-- Slide Text Content -->
+                    <div class="relative z-10 max-w-xl space-y-3">
+                        <span class="inline-block bg-blue-500/20 text-cyan-300 border border-blue-500/30 text-xs font-bold px-3.5 py-1.5 rounded-full backdrop-blur shadow-sm"
+                            x-text="slide.badge"></span>
+                        <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight"
+                            x-text="slide.title"></h1>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed"
+                            x-text="slide.subtitle"></p>
+                        <div class="pt-2">
+                            <a :href="slide.link" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-extrabold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg shadow-blue-600/30 transition transform hover:-translate-y-0.5">
+                                Belanja Kategori Ini ➔
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Previous Button (⬅) -->
+        <button @click="prev()" type="button"
+            class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-2xl bg-slate-900/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-blue-600 transition duration-300 shadow-lg">
+            ❮
+        </button>
+
+        <!-- Next Button (➔) -->
+        <button @click="next()" type="button"
+            class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-2xl bg-slate-900/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-blue-600 transition duration-300 shadow-lg">
+            ❯
+        </button>
+
+        <!-- Dot Navigation Indicators -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-slate-950/60 backdrop-blur px-3 py-1.5 rounded-full border border-slate-800">
+            <template x-for="(slide, index) in slides" :key="index">
+                <button @click="activeSlide = index" type="button"
+                    :class="activeSlide === index ? 'w-6 bg-cyan-400' : 'w-2 bg-slate-600 hover:bg-slate-400'"
+                    class="h-2 rounded-full transition-all duration-300"></button>
+            </template>
         </div>
     </div>
 
