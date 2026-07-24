@@ -49,6 +49,74 @@ Aplikasi ini menyediakan platform belanja online komprehensif untuk produk akses
 
 ---
 
+## 🏗️ Arsitektur MVC & Struktur Direktori Project
+
+Aplikasi ini menerapkan pola arsitektur **MVC (Model-View-Controller)** secara bersih dan terpisah sesuai standar Laravel:
+
+```text
+e_commerce_ujikom/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/
+│   │   │   │   ├── CategoryController.php   # CRUD Kategori Aksesori
+│   │   │   │   ├── DashboardController.php  # Analytics & KPI Matrix Dashboard Admin
+│   │   │   │   ├── OrderController.php      # Verifikasi Bayar & Status Order
+│   │   │   │   ├── ProductController.php    # CRUD Produk dengan Image Cropper (Cropper.js)
+│   │   │   │   └── ReportController.php     # Rekap & Laporan Penjualan
+│   │   │   ├── Auth/                        # Controller Autentikasi (Breeze)
+│   │   │   ├── CartController.php           # Kelola Keranjang Belanja & Persistent User Cart
+│   │   │   ├── CheckoutController.php       # Transaksi Checkout & Generate Invoice
+│   │   │   ├── OrderController.php          # Riwayat Order & Upload Bukti Transfer Customer
+│   │   │   ├── ProductController.php        # Katalog Publik, Pencarian & Detail Produk
+│   │   │   └── ProfileController.php        # Manajemen Profil Pengguna
+│   │   └── Middleware/
+│   │       └── AdminMiddleware.php          # Filter Hak Akses Khusus Admin (Role: admin)
+│   ├── Models/                              # Layer Model Eloquent (Relasi & Business Logic)
+│   │   ├── Category.php                     # Model Kategori (Relasi: HasMany Products)
+│   │   ├── Order.php                        # Model Pesanan (Relasi: BelongsTo User, HasMany Items, HasOne Payment)
+│   │   ├── OrderItem.php                    # Model Item Pesanan (Relasi: BelongsTo Order, BelongsTo Product)
+│   │   ├── Payment.php                      # Model Pembayaran (Relasi: BelongsTo Order)
+│   │   ├── Product.php                      # Model Produk (Relasi: BelongsTo Category, HasMany OrderItems)
+│   │   └── User.php                         # Model User (Helper: isAdmin(), Relasi: HasMany Orders)
+│   └── View/
+│       └── Components/
+│           ├── AdminLayout.php              # Class Layout Admin Dashboard
+│           └── AppLayout.php                # Class Layout Storefront Customer
+├── database/
+│   ├── migrations/                          # 6 Migration Tabel Database (Users, Categories, Products, Orders, Items, Payments)
+│   └── seeders/                             # Data Seeder Demo (AdminUserSeeder, CategorySeeder, ProductSeeder)
+├── public/
+│   ├── images/                              # Asset Banner Slider (banner1,2,3.png) & Logo Resmi (logo.png)
+│   └── storage/                             # Symlink Upload Foto Produk & Bukti Bayar Customer
+├── resources/
+│   ├── css/                                 # Custom Styling Tailwind CSS v4 (@import "tailwindcss")
+│   └── views/                               # Layer View Template Blade Engine
+│       ├── admin/                           # Tampilan Dashboard & Panel Admin (Dark Theme)
+│       │   ├── categories/                  # View Index, Create, Edit Kategori
+│       │   ├── dashboard/                   # View Analytics Dashboard & KPI Widgets
+│       │   ├── orders/                      # View Daftar & Detail Verifikasi Order
+│       │   ├── products/                    # View Index, Create, Edit Produk (Square Cropper Integration)
+│       │   └── reports/                     # View Laporan Penjualan
+│       ├── auth/                            # View Login & Register (Light Glassmorphism Theme)
+│       ├── cart/                            # View Keranjang Belanja & Modal Hapus (SweetAlert2)
+│       ├── checkout/                        # View Form Checkout Alamat & Pilihan Metode Bayar
+│       ├── layouts/                         # Layout Master Template App
+│       │   ├── admin.blade.php              # Layout Admin (Fixed Sidebar, SweetAlert2, Cropper.js Modal)
+│       │   ├── app.blade.php                # Layout Storefront (Sticky Glassmorphism Navbar, Light Footer)
+│       │   └── guest.blade.php              # Layout Auth Login/Register
+│       ├── orders/                          # View Riwayat Order & Form Upload Bukti Bayar Customer
+│       └── products/                        # View Katalog Utama (Hero Banner Carousel) & Detail Produk
+├── routes/
+│   ├── auth.php                             # Route System Autentikasi (Login, Register, Logout)
+│   └── web.php                              # Route Skeleton Publik, Customer, & Admin Group Middleware
+└── tests/
+    ├── Feature/                             # 26 Feature & Integration Test Cases
+    └── TestCase.php                         # Base Test Class dengan Auto-Reseed Database Testing
+```
+
+---
+
 ## 🔑 Kredensial Akun Demo Asesmen
 
 Gunakan akun demo berikut untuk menguji seluruh fitur aplikasi:
