@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
@@ -14,6 +15,14 @@ class CheckoutController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
+
+        // Restore cached cart if session cart is empty
+        if (empty($cart) && auth()->check()) {
+            $cart = Cache::get('user_cart_' . auth()->id(), []);
+            if (! empty($cart)) {
+                session()->put('cart', $cart);
+            }
+        }
 
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda masih kosong.');
@@ -39,6 +48,11 @@ class CheckoutController extends Controller
         ]);
 
         $cart = session()->get('cart', []);
+
+        // Restore cached cart if session cart is empty
+        if (empty($cart) && auth()->check()) {
+            $cart = Cache::get('user_cart_' . auth()->id(), []);
+        }
 
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda masih kosong.');
@@ -94,6 +108,7 @@ class CheckoutController extends Controller
             ]);
 
             session()->forget('cart');
+            Cache::forget('user_cart_' . $request->user()->id);
 
             return $order;
         });

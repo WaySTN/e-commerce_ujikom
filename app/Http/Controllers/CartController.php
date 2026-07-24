@@ -4,12 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CartController extends Controller
 {
+    private function saveCart(array $cart)
+    {
+        session()->put('cart', $cart);
+        if (auth()->check()) {
+            Cache::forever('user_cart_' . auth()->id(), $cart);
+        }
+    }
+
     public function index()
     {
         $cart = session()->get('cart', []);
+
+        // Restore cart from cache for logged-in user if session cart is empty
+        if (empty($cart) && auth()->check()) {
+            $cachedCart = Cache::get('user_cart_' . auth()->id(), []);
+            if (! empty($cachedCart)) {
+                $cart = $cachedCart;
+                session()->put('cart', $cart);
+            }
+        } elseif (! empty($cart) && auth()->check()) {
+            Cache::forever('user_cart_' . auth()->id(), $cart);
+        }
+
         $total = array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['price'] * $item['qty']);
         }, 0);
@@ -24,6 +45,12 @@ class CartController extends Controller
         }
 
         $cart = session()->get('cart', []);
+
+        // Restore cached cart if session cart is empty
+        if (empty($cart) && auth()->check()) {
+            $cart = Cache::get('user_cart_' . auth()->id(), []);
+        }
+
         $qty = (int) $request->input('qty', 1);
 
         if (isset($cart[$product->id])) {
@@ -47,7 +74,7 @@ class CartController extends Controller
             ];
         }
 
-        session()->put('cart', $cart);
+        $this->saveCart($cart);
 
         return back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
@@ -66,7 +93,7 @@ class CartController extends Controller
             }
 
             $cart[$product->id]['qty'] = (int) $request->qty;
-            session()->put('cart', $cart);
+            $this->saveCart($cart);
 
             return back()->with('success', 'Jumlah produk berhasil diperbarui.');
         }
@@ -80,7 +107,7 @@ class CartController extends Controller
 
         if (isset($cart[$product->id])) {
             unset($cart[$product->id]);
-            session()->put('cart', $cart);
+            $this->saveCart($cart);
             return back()->with('success', 'Produk berhasil dihapus dari keranjang.');
         }
 

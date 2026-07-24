@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -28,7 +29,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if ($request->user()->isAdmin()) {
+        // Restore saved cart for the authenticated user upon login
+        $user = $request->user();
+        $cachedCart = Cache::get('user_cart_' . $user->id, []);
+        if (! empty($cachedCart)) {
+            session()->put('cart', $cachedCart);
+        }
+
+        if ($user->isAdmin()) {
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
 
