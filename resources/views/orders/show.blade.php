@@ -124,7 +124,7 @@
                             <p class="text-slate-600">Bank BCA: <strong>123-456-7890</strong><br>a.n. <strong>Wahyu Gadget Pedia</strong></p>
                         </div>
 
-                        <!-- Proof Upload Form -->
+                        <!-- Proof Upload Form with SweetAlert2 Confirmation -->
                         <div class="pt-4 border-t border-slate-100">
                             <h4 class="font-bold text-slate-900 text-xs uppercase mb-2">Upload Bukti Transfer</h4>
 
@@ -138,7 +138,7 @@
                             @endif
 
                             @if($order->payment->status !== 'lunas')
-                                <form method="POST" action="{{ route('orders.bukti-bayar', $order->id) }}" enctype="multipart/form-data" class="space-y-3">
+                                <form method="POST" action="{{ route('orders.bukti-bayar', $order->id) }}" enctype="multipart/form-data" class="space-y-3" onsubmit="event.preventDefault(); confirmUploadProof(this);">
                                     @csrf
                                     <input type="file" name="proof_image" accept="image/jpeg,image/png,image/jpg" required
                                         class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">

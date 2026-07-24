@@ -58,12 +58,11 @@
                                 </span>
                             </div>
 
-                            <!-- Remove Form -->
-                            <form method="POST" action="{{ route('cart.destroy', $id) }}">
+                            <!-- Remove Form with SweetAlert2 Modal -->
+                            <form method="POST" action="{{ route('cart.destroy', $id) }}" onsubmit="event.preventDefault(); confirmCartDelete(this, '{{ addslashes($item['name']) }}');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" onclick="return confirm('Hapus produk dari keranjang?')"
-                                    class="text-rose-500 hover:text-rose-700 p-2 rounded-lg hover:bg-rose-50 transition" title="Hapus">
+                                <button type="submit" class="text-rose-500 hover:text-rose-700 p-2 rounded-lg hover:bg-rose-50 transition" title="Hapus">
                                     🗑️
                                 </button>
                             </form>

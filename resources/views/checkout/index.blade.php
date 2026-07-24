@@ -5,7 +5,7 @@
         <span>📋</span> Checkout Pesanan
     </h1>
 
-    <form method="POST" action="{{ route('checkout.store') }}" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <form method="POST" action="{{ route('checkout.store') }}" class="grid grid-cols-1 lg:grid-cols-3 gap-8" onsubmit="event.preventDefault(); confirmCheckoutSubmit(this);">
         @csrf
 
         <!-- Shipping & Payment Details (Left Column) -->

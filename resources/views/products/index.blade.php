@@ -195,14 +195,23 @@
                             </div>
                         </div>
 
-                        <!-- Add to Cart Form -->
-                        <form method="POST" action="{{ route('cart.store', $product->id) }}" class="mt-4">
-                            @csrf
-                            <button type="submit" {{ $product->stock < 1 ? 'disabled' : '' }}
-                                class="w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm {{ $product->stock > 0 ? 'bg-slate-900 hover:bg-blue-600 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
-                                <span>🛒</span> {{ $product->stock > 0 ? '+ Keranjang' : 'Stok Habis' }}
-                            </button>
-                        </form>
+                        <!-- Add to Cart Form (Auth vs Guest) -->
+                        @auth
+                            <form method="POST" action="{{ route('cart.store', $product->id) }}" class="mt-4">
+                                @csrf
+                                <button type="submit" {{ $product->stock < 1 ? 'disabled' : '' }}
+                                    class="w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm {{ $product->stock > 0 ? 'bg-slate-900 hover:bg-blue-600 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
+                                    <span>🛒</span> {{ $product->stock > 0 ? '+ Keranjang' : 'Stok Habis' }}
+                                </button>
+                            </form>
+                        @else
+                            <div class="mt-4">
+                                <button type="button" onclick="promptLoginToCart(event)" {{ $product->stock < 1 ? 'disabled' : '' }}
+                                    class="w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition shadow-sm {{ $product->stock > 0 ? 'bg-slate-900 hover:bg-blue-600 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
+                                    <span>🛒</span> {{ $product->stock > 0 ? '+ Keranjang' : 'Stok Habis' }}
+                                </button>
+                            </div>
+                        @endauth
                     </div>
                 </div>
             @endforeach

@@ -52,21 +52,36 @@
                     </div>
                 </div>
 
-                <!-- Add to Cart Form -->
+                <!-- Add to Cart Form (Auth vs Guest) -->
                 <div class="mt-8 pt-6 border-t border-slate-100">
-                    <form method="POST" action="{{ route('cart.store', $product->id) }}" class="space-y-4">
-                        @csrf
-                        <div class="flex items-center gap-4">
-                            <label for="qty" class="text-xs font-bold text-slate-700 uppercase">Jumlah:</label>
-                            <input type="number" id="qty" name="qty" value="1" min="1" max="{{ $product->stock }}"
-                                class="w-20 py-2 px-3 border border-slate-300 rounded-xl text-center text-sm font-bold focus:ring-2 focus:ring-blue-500">
-                        </div>
+                    @auth
+                        <form method="POST" action="{{ route('cart.store', $product->id) }}" class="space-y-4">
+                            @csrf
+                            <div class="flex items-center gap-4">
+                                <label for="qty" class="text-xs font-bold text-slate-700 uppercase">Jumlah:</label>
+                                <input type="number" id="qty" name="qty" value="1" min="1" max="{{ $product->stock }}"
+                                    class="w-20 py-2 px-3 border border-slate-300 rounded-xl text-center text-sm font-bold focus:ring-2 focus:ring-blue-500">
+                            </div>
 
-                        <button type="submit" {{ $product->stock < 1 ? 'disabled' : '' }}
-                            class="w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20 {{ $product->stock > 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
-                            <span class="text-lg">🛒</span> {{ $product->stock > 0 ? 'Tambah ke Keranjang Belanja' : 'Stok Produk Habis' }}
-                        </button>
-                    </form>
+                            <button type="submit" {{ $product->stock < 1 ? 'disabled' : '' }}
+                                class="w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20 {{ $product->stock > 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
+                                <span class="text-lg">🛒</span> {{ $product->stock > 0 ? 'Tambah ke Keranjang Belanja' : 'Stok Produk Habis' }}
+                            </button>
+                        </form>
+                    @else
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <label for="qty" class="text-xs font-bold text-slate-700 uppercase">Jumlah:</label>
+                                <input type="number" id="qty" name="qty" value="1" min="1" max="{{ $product->stock }}"
+                                    class="w-20 py-2 px-3 border border-slate-300 rounded-xl text-center text-sm font-bold focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <button type="button" onclick="promptLoginToCart(event)" {{ $product->stock < 1 ? 'disabled' : '' }}
+                                class="w-full py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-blue-600/20 {{ $product->stock > 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed' }}">
+                                <span class="text-lg">🛒</span> {{ $product->stock > 0 ? 'Tambah ke Keranjang Belanja' : 'Stok Produk Habis' }}
+                            </button>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>

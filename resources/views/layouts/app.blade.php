@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { font-family: 'Outfit', sans-serif; }
@@ -51,16 +53,24 @@
                         $cart = session()->get('cart', []);
                         $cartCount = array_sum(array_column($cart, 'qty'));
                     @endphp
-                    <a href="{{ route('cart.index') }}" class="relative p-2.5 text-slate-700 hover:text-blue-600 hover:bg-slate-100 transition rounded-xl bg-slate-100/80 border border-slate-200/80 flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                        </svg>
-                        @if($cartCount > 0)
-                            <span class="absolute -top-1.5 -right-1.5 bg-blue-600 text-white font-extrabold text-[11px] w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-pulse">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
-                    </a>
+                    @auth
+                        <a href="{{ route('cart.index') }}" class="relative p-2.5 text-slate-700 hover:text-blue-600 hover:bg-slate-100 transition rounded-xl bg-slate-100/80 border border-slate-200/80 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            @if($cartCount > 0)
+                                <span class="absolute -top-1.5 -right-1.5 bg-blue-600 text-white font-extrabold text-[11px] w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-pulse">
+                                    {{ $cartCount }}
+                                </span>
+                            @endif
+                        </a>
+                    @else
+                        <button type="button" onclick="promptLoginToCart(event)" class="relative p-2.5 text-slate-700 hover:text-blue-600 hover:bg-slate-100 transition rounded-xl bg-slate-100/80 border border-slate-200/80 flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                        </button>
+                    @endauth
 
                     <!-- Auth Dropdown / Action Buttons -->
                     @auth
@@ -69,9 +79,9 @@
                                 <span class="text-xs font-bold text-slate-900 block">{{ auth()->user()->name }}</span>
                                 <span class="text-[10px] text-blue-600 block uppercase font-bold">{{ auth()->user()->role }}</span>
                             </div>
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('logout') }}" id="user-logout-form">
                                 @csrf
-                                <button type="submit" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-2 rounded-xl transition font-bold">
+                                <button type="button" onclick="confirmUserLogout()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-2 rounded-xl transition font-bold">
                                     Keluar
                                 </button>
                             </form>
@@ -90,27 +100,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Flash Messages -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 w-full">
-        @if(session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl mb-4 flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">✅</span>
-                    <span class="text-xs font-bold">{{ session('success') }}</span>
-                </div>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-2xl mb-4 flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">⚠️</span>
-                    <span class="text-xs font-bold">{{ session('error') }}</span>
-                </div>
-            </div>
-        @endif
-    </div>
 
     <!-- Main Content Body -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
@@ -179,5 +168,143 @@
         </div>
     </footer>
 
+    <!-- Customer User SweetAlert2 System Scripts -->
+    <script>
+        // Customer Toast Notification System
+        const CustomerToast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3500,
+            timerProgressBar: true,
+            background: '#ffffff',
+            color: '#0f172a',
+            customClass: {
+                popup: 'border border-slate-200 rounded-2xl shadow-xl'
+            }
+        });
+
+        // Auto Fire Session Success / Error Popups
+        @if(session('success'))
+            CustomerToast.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}"
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#ef4444',
+                customClass: {
+                    popup: 'rounded-3xl shadow-2xl p-6 font-sans'
+                }
+            });
+        @endif
+
+        // Guest Login Popup Prompt
+        function promptLoginToCart(event) {
+            if (event) event.preventDefault();
+            Swal.fire({
+                title: 'Silakan Login Terlebih Dahulu',
+                text: 'Untuk menambahkan produk ke keranjang belanja, Anda perlu masuk ke akun pengguna terlebih dahulu.',
+                icon: 'info',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: '🔑 Masuk ke Akun',
+                denyButtonText: '⚡ Daftar Akun Baru',
+                cancelButtonText: 'Lanjut Lihat Produk',
+                confirmButtonColor: '#2563eb',
+                denyButtonColor: '#0284c7',
+                cancelButtonColor: '#64748b',
+                customClass: {
+                    popup: 'rounded-3xl shadow-2xl p-6 font-sans',
+                    confirmButton: 'rounded-xl px-4 py-2.5 text-xs font-extrabold',
+                    denyButton: 'rounded-xl px-4 py-2.5 text-xs font-extrabold',
+                    cancelButton: 'rounded-xl px-4 py-2.5 text-xs font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('login') }}";
+                } else if (result.isDenied) {
+                    window.location.href = "{{ route('register') }}";
+                }
+            });
+        }
+
+        // Generic Form Action Confirmation for Customer
+        function confirmCustomerAction(form, options = {}) {
+            const title = options.title || 'Konfirmasi Aksi';
+            const text = options.text || 'Apakah Anda yakin ingin melanjutkan aksi ini?';
+            const icon = options.icon || 'question';
+            const confirmButtonText = options.confirmButtonText || 'Ya, Lanjutkan';
+            const confirmButtonColor = options.confirmButtonColor || '#2563eb';
+
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: confirmButtonColor,
+                cancelButtonColor: '#64748b',
+                confirmButtonText: confirmButtonText,
+                cancelButtonText: 'Batal',
+                customClass: {
+                    popup: 'rounded-3xl shadow-2xl p-6 font-sans',
+                    confirmButton: 'rounded-xl px-5 py-2.5 text-xs font-extrabold',
+                    cancelButton: 'rounded-xl px-5 py-2.5 text-xs font-bold'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+
+        // Specific Customer Helpers
+        function confirmCartDelete(form, itemName = 'produk ini') {
+            confirmCustomerAction(form, {
+                title: 'Hapus dari Keranjang?',
+                text: `Apakah Anda yakin ingin menghapus "${itemName}" dari keranjang belanja?`,
+                icon: 'warning',
+                confirmButtonText: 'Ya, Hapus',
+                confirmButtonColor: '#dc2626'
+            });
+        }
+
+        function confirmCheckoutSubmit(form) {
+            confirmCustomerAction(form, {
+                title: 'Konfirmasi Buat Pesanan?',
+                text: 'Pesanan Anda akan diproses dan stok produk akan langsung dikunci. Pastikan alamat & metode pembayaran sudah benar.',
+                icon: 'question',
+                confirmButtonText: 'Ya, Buat Pesanan Sekarang',
+                confirmButtonColor: '#2563eb'
+            });
+        }
+
+        function confirmUploadProof(form) {
+            confirmCustomerAction(form, {
+                title: 'Unggah Bukti Transfer?',
+                text: 'Pastikan gambar foto bukti transfer atau struk transaksi terlihat jelas untuk verifikasi admin.',
+                icon: 'info',
+                confirmButtonText: 'Ya, Unggah Bukti',
+                confirmButtonColor: '#059669'
+            });
+        }
+
+        function confirmUserLogout() {
+            const form = document.getElementById('user-logout-form');
+            confirmCustomerAction(form, {
+                title: 'Keluar dari Akun?',
+                text: 'Sesi akun Anda akan diakhiri.',
+                icon: 'question',
+                confirmButtonText: 'Ya, Keluar',
+                confirmButtonColor: '#dc2626'
+            });
+        }
+    </script>
 </body>
 </html>
