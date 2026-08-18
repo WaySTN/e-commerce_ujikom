@@ -37,13 +37,42 @@ class ReportController extends Controller
             ->take(5)
             ->get();
 
+        // Prepare daily chart data for the selected date range
+        $start = \Carbon\Carbon::parse($startDate);
+        $end = \Carbon\Carbon::parse($endDate);
+        $chartLabels = [];
+        $chartRevenues = [];
+        $chartOrderCounts = [];
+
+        $diffInDays = $start->diffInDays($end);
+        if ($diffInDays <= 60) {
+            $current = $start->copy();
+            while ($current->lte($end)) {
+                $dateStr = $current->toDateString();
+                $chartLabels[] = $current->translatedFormat('d M');
+
+                $dayRev = Order::whereDate('created_at', $dateStr)
+                    ->whereHas('payment', fn($q) => $q->where('status', 'lunas'))
+                    ->sum('total_price');
+                $chartRevenues[] = (float) $dayRev;
+
+                $dayCount = Order::whereDate('created_at', $dateStr)->count();
+                $chartOrderCounts[] = $dayCount;
+
+                $current->addDay();
+            }
+        }
+
         return view('admin.reports.index', compact(
             'orders',
             'startDate',
             'endDate',
             'totalTransactions',
             'totalRevenue',
-            'topProducts'
+            'topProducts',
+            'chartLabels',
+            'chartRevenues',
+            'chartOrderCounts'
         ));
     }
 }

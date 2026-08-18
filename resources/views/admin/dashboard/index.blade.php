@@ -74,6 +74,45 @@
         </div>
     </div>
 
+    <!-- Interactive Charts Section (Permintaan Khusus Asesor BNSP) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <!-- 7-Day Revenue Trend Line/Area Chart -->
+        <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-800 pb-4 mb-4">
+                <div>
+                    <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                        <span>📈</span> Tren Pendapatan 7 Hari Terakhir
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Grafik dinamika omset harian transaksi terverifikasi LUNAS</p>
+                </div>
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-bold w-fit">
+                    Aktif & Realtime
+                </span>
+            </div>
+            <div class="h-72 w-full relative">
+                <canvas id="revenueTrendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Sales Distribution Doughnut Chart -->
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                    <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                        <span>🏷️</span> Penjualan Kategori
+                    </h3>
+                    <span class="text-xs text-slate-400 font-semibold">Distribusi Qty</span>
+                </div>
+                <div class="h-60 w-full relative flex items-center justify-center">
+                    <canvas id="categorySalesChart"></canvas>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-slate-800/80 text-center">
+                <span class="text-[11px] text-slate-400">Total terjual per kategori aksesori gadget</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Analytics Breakdown Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <!-- Order Status Breakdown Widget -->
@@ -289,5 +328,189 @@
                 </table>
             </div>
         @endif
-    </div>
+    <!-- Chart.js Scripts Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Revenue & Order Trend Line/Area Chart
+            const revenueCtx = document.getElementById('revenueTrendChart');
+            if (revenueCtx) {
+                const dates = @json($chartDates);
+                const revenues = @json($chartRevenues);
+                const orderCounts = @json($chartOrderCounts);
+
+                const gradient = revenueCtx.getContext('2d').createLinearGradient(0, 0, 0, 250);
+                gradient.addColorStop(0, 'rgba(14, 165, 233, 0.35)');
+                gradient.addColorStop(1, 'rgba(14, 165, 233, 0.0)');
+
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: 'Pendapatan Lunas (Rp)',
+                                data: revenues,
+                                borderColor: '#0ea5e9',
+                                backgroundColor: gradient,
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#38bdf8',
+                                pointBorderColor: '#0f172a',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 7,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Volume Order (Transaksi)',
+                                data: orderCounts,
+                                borderColor: '#34d399',
+                                backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false,
+                                tension: 0.3,
+                                pointBackgroundColor: '#10b981',
+                                pointBorderColor: '#0f172a',
+                                pointBorderWidth: 2,
+                                pointRadius: 3,
+                                pointHoverRadius: 6,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#cbd5e1',
+                                    font: { family: "'Outfit', sans-serif", size: 11, weight: 'bold' },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: 6
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                titleColor: '#f8fafc',
+                                bodyColor: '#cbd5e1',
+                                borderColor: '#334155',
+                                borderWidth: 1,
+                                padding: 12,
+                                cornerRadius: 12,
+                                displayColors: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.datasetIndex === 0) {
+                                            return ' Pendapatan: Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
+                                        }
+                                        return ' Total Pesanan: ' + context.raw + ' transaksi';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                                ticks: { color: '#94a3b8', font: { family: "'Outfit', sans-serif", size: 11 } }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                                ticks: {
+                                    color: '#94a3b8',
+                                    font: { family: "'Outfit', sans-serif", size: 10 },
+                                    callback: function(value) {
+                                        if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(1) + 'M';
+                                        if (value >= 1000) return 'Rp ' + (value / 1000).toFixed(0) + 'k';
+                                        return 'Rp ' + value;
+                                    }
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                ticks: {
+                                    color: '#34d399',
+                                    font: { family: "'Outfit', sans-serif", size: 10 },
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        return value + ' tx';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 2. Category Sales Distribution Doughnut Chart
+            const categoryCtx = document.getElementById('categorySalesChart');
+            if (categoryCtx) {
+                const categoryData = @json($categorySales);
+                const labels = categoryData.map(c => c.name);
+                const quantities = categoryData.map(c => parseInt(c.total_sold));
+
+                const colorPalette = [
+                    '#3b82f6', '#06b6d4', '#10b981', '#a855f7', '#f59e0b', '#ec4899', '#6366f1'
+                ];
+
+                new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: quantities,
+                            backgroundColor: colorPalette.slice(0, labels.length),
+                            borderColor: '#0f172a',
+                            borderWidth: 3,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#cbd5e1',
+                                    font: { family: "'Outfit', sans-serif", size: 10, weight: 'bold' },
+                                    padding: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                                titleColor: '#f8fafc',
+                                bodyColor: '#cbd5e1',
+                                borderColor: '#334155',
+                                borderWidth: 1,
+                                padding: 10,
+                                cornerRadius: 10,
+                                callbacks: {
+                                    label: function(context) {
+                                        return ' ' + context.label + ': ' + context.raw + ' unit terjual';
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '65%'
+                    }
+                });
+            }
+        });
+    </script>
 </x-admin-layout>

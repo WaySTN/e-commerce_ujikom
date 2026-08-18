@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class OrderController extends Controller
 {
     public function index(Request $request)
@@ -44,11 +46,37 @@ class OrderController extends Controller
             'status' => 'required|in:pending,diproses,dikirim,selesai,dibatalkan',
         ]);
 
-        $order->update([
-            'status' => $request->status,
-        ]);
+        $previousStatus = $order->status;
+        $newStatus = $request->status;
 
-        return back()->with('success', 'Status pesanan berhasil diperbarui menjadi "' . $request->status . '".');
+        DB::transaction(function () use ($order, $previousStatus, $newStatus) {
+            $order->update([
+                'status' => $newStatus,
+            ]);
+
+            // If order is cancelled, restore stock for all products in this order
+            if ($newStatus === 'dibatalkan' && $previousStatus !== 'dibatalkan') {
+                $order->load('items.product');
+                foreach ($order->items as $item) {
+                    if ($item->product) {
+                        $item->product->increment('stock', $item->qty);
+                    }
+                }
+            }
+
+            // If order is finished (selesai) and payment is COD (Cash on Delivery), auto-mark payment as lunas
+            if ($newStatus === 'selesai') {
+                $payment = $order->payment;
+                if ($payment && $payment->method === 'cod' && $payment->status === 'menunggu') {
+                    $payment->update([
+                        'status' => 'lunas',
+                        'paid_at' => now(),
+                    ]);
+                }
+            }
+        });
+
+        return back()->with('success', 'Status pesanan berhasil diperbarui menjadi "' . $newStatus . '".');
     }
 
     public function verifikasiPembayaran(Request $request, Order $order)
