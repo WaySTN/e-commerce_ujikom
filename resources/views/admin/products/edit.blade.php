@@ -1,8 +1,8 @@
 <x-admin-layout>
     <x-slot name="header">Edit Produk {{ $product->name }}</x-slot>
 
-    <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-        <h3 class="font-bold text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Edit Produk</h3>
+    <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-8 shadow-xl">
+        <h3 class="font-bold text-base sm:text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Edit Produk</h3>
 
         <form method="POST" action="{{ route('admin.produk.update', $product->id) }}" enctype="multipart/form-data" class="space-y-5">
             @csrf
@@ -19,7 +19,7 @@
             </div>
 
             <!-- Category & Price Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                     <label for="category_id" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Kategori <span class="text-rose-500">*</span></label>
                     <select id="category_id" name="category_id" required
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Stock & Image Cropper Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                     <label for="stock" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Stok <span class="text-rose-500">*</span></label>
                     <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock) }}" min="0" required
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Image Preview Box (Current or Cropped) -->
-            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-4">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div class="w-20 h-20 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center flex-shrink-0">
                     @if($product->image)
                         <img id="cropped-preview-img" src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">

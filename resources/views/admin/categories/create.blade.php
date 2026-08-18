@@ -1,14 +1,14 @@
 <x-admin-layout>
     <x-slot name="header">Tambah Kategori Baru</x-slot>
 
-    <div class="max-w-xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-        <h3 class="font-bold text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Tambah Kategori</h3>
+    <div class="max-w-xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-8 shadow-xl">
+        <h3 class="font-bold text-base sm:text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Tambah Kategori</h3>
 
         <form method="POST" action="{{ route('admin.kategori.store') }}" class="space-y-5">
             @csrf
 
             <div>
-                <label for="name" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Nama Kategori</label>
+                <label for="name" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Nama Kategori <span class="text-rose-500">*</span></label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required
                     placeholder="Contoh: Casing & Pelindung"
                     class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">

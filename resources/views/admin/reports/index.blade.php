@@ -54,7 +54,7 @@
     <!-- ======================================================= -->
     <div class="print-only p-6 bg-white text-slate-900 font-sans">
         <!-- Formal Letterhead / Kop Surat -->
-        <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4 mb-6">
+        <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-6">
             <div>
                 <h1 class="text-2xl font-extrabold uppercase text-slate-900 tracking-wider">Wahyu Gadget Pedia Store</h1>
                 <p class="text-xs text-slate-600">Pusat Belanja Aksesori Gadget Terlengkap & Terpercaya</p>
@@ -176,36 +176,36 @@
     <!-- ======================================================= -->
     <div class="screen-only">
         <!-- Date Range Filter & Print Action Bar -->
-        <div class="no-print bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl mb-8 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
-            <form method="GET" action="{{ route('admin.laporan.index') }}" class="flex flex-wrap items-end gap-4 w-full md:w-auto">
-                <div>
+        <div class="no-print bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl mb-6 sm:mb-8 flex flex-col md:flex-row items-stretch md:items-end justify-between gap-4">
+            <form method="GET" action="{{ route('admin.laporan.index') }}" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-end gap-3 sm:gap-4 flex-1">
+                <div class="flex-1 sm:flex-initial">
                     <label for="start_date" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Tanggal Mulai</label>
                     <input type="date" id="start_date" name="start_date" value="{{ $startDate }}"
-                        class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500">
+                        class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-3 sm:px-4 focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <div>
+                <div class="flex-1 sm:flex-initial">
                     <label for="end_date" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Tanggal Selesai</label>
                     <input type="date" id="end_date" name="end_date" value="{{ $endDate }}"
-                        class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500">
+                        class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-3 sm:px-4 focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center gap-2">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
                     <span>🔍</span> Filter Laporan
                 </button>
             </form>
 
-            <button type="button" onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center gap-2">
+            <button type="button" onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 w-full md:w-auto">
                 <span>🖨️</span> Cetak / Simpan PDF
             </button>
         </div>
 
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-            <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl flex items-center justify-between shadow-lg">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl">
                 <div>
                     <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Transaksi Selesai</span>
-                    <span class="text-3xl font-extrabold text-white mt-1 block">{{ number_format($totalTransactions) }} pesanan</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-white mt-1 block">{{ number_format($totalTransactions) }} pesanan</span>
                     <span class="text-[11px] text-slate-500 block mt-0.5">Selama periode terpilih</span>
                 </div>
                 <div class="no-print bg-blue-600/20 text-blue-400 p-3 rounded-2xl border border-blue-500/30 text-2xl">
@@ -213,10 +213,10 @@
                 </div>
             </div>
 
-            <div class="bg-slate-950 border border-slate-800 p-6 rounded-2xl flex items-center justify-between shadow-lg">
+            <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl">
                 <div>
                     <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Pendapatan Lunas</span>
-                    <span class="text-3xl font-extrabold text-emerald-400 mt-1 block">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1 block">
                         Rp {{ number_format($totalRevenue, 0, ',', '.') }}
                     </span>
                     <span class="text-[11px] text-slate-500 block mt-0.5">Omset bersih terverifikasi</span>
@@ -227,27 +227,32 @@
             </div>
         </div>
 
-        <!-- Dynamic Daily Report Chart -->
+        <!-- Dynamic Daily/Monthly Report Chart -->
         @if(!empty($chartLabels))
-            <div class="no-print bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl mb-8">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+            <div class="no-print bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl mb-6 sm:mb-8">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-800 pb-4 mb-4">
                     <div>
-                        <h3 class="font-extrabold text-white text-base flex items-center gap-2">
-                            <span>📊</span> Grafik Pendapatan Harian Periode Terpilih
+                        <h3 class="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
+                            <span>📊</span> Grafik Pendapatan {{ ($chartPeriodType ?? 'harian') === 'bulanan' ? 'Bulanan' : 'Harian' }} Periode Terpilih
                         </h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Visualisasi omset per hari dari tanggal {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} sampai {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</p>
+                        <p class="text-xs text-slate-400 mt-0.5">
+                            Visualisasi omset per {{ ($chartPeriodType ?? 'harian') === 'bulanan' ? 'bulan' : 'hari' }} dari {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
+                        </p>
                     </div>
+                    <span class="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-3 py-1 rounded-full font-bold w-fit">
+                        {{ ($chartPeriodType ?? 'harian') === 'bulanan' ? 'Agregasi Bulanan' : 'Agregasi Harian' }}
+                    </span>
                 </div>
-                <div class="h-64 w-full relative">
+                <div class="h-64 sm:h-72 w-full relative">
                     <canvas id="reportDailyChart"></canvas>
                 </div>
             </div>
         @endif
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <!-- Top Selling Products Card -->
-            <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl h-fit">
-                <h3 class="font-extrabold text-white text-base border-b border-slate-800 pb-3 mb-4 flex items-center gap-2">
+            <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl h-fit">
+                <h3 class="font-extrabold text-white text-sm sm:text-base border-b border-slate-800 pb-3 mb-4 flex items-center gap-2">
                     <span>🔥</span> Top 5 Produk Terlaris
                 </h3>
 
@@ -256,12 +261,12 @@
                 @else
                     <div class="space-y-3">
                         @foreach($topProducts as $top)
-                            <div class="flex items-center justify-between pb-3 border-b border-slate-800 last:border-b-0 text-xs">
-                                <div>
-                                    <span class="font-bold text-white block">{{ $top->product_name }}</span>
-                                    <span class="text-slate-400">Terjual: {{ number_format($top->total_qty) }} unit</span>
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800 last:border-b-0 text-xs gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <span class="font-bold text-white block truncate">{{ $top->product_name }}</span>
+                                    <span class="text-slate-400 text-[11px]">Terjual: {{ number_format($top->total_qty) }} unit</span>
                                 </div>
-                                <span class="font-extrabold text-cyan-400">
+                                <span class="font-extrabold text-cyan-400 flex-shrink-0">
                                     Rp {{ number_format($top->total_sales, 0, ',', '.') }}
                                 </span>
                             </div>
@@ -271,16 +276,16 @@
             </div>
 
             <!-- Detailed Transactions Table -->
-            <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
-                <h3 class="font-extrabold text-white text-base border-b border-slate-800 pb-4 mb-4">
-                    Daftar Rincian Transaksi Periode {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
+            <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
+                <h3 class="font-extrabold text-white text-sm sm:text-base border-b border-slate-800 pb-4 mb-4">
+                    Rincian Transaksi ({{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }})
                 </h3>
 
                 @if($orders->isEmpty())
                     <p class="text-sm text-slate-500 text-center py-6">Tidak ada transaksi pada rentang tanggal ini.</p>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300">
+                        <table class="w-full text-left text-xs text-slate-300 min-w-[650px]">
                             <thead class="text-slate-400 uppercase bg-slate-900 border-b border-slate-800">
                                 <tr>
                                     <th class="py-2.5 px-3">No. Invoice</th>
@@ -294,14 +299,14 @@
                             <tbody class="divide-y divide-slate-800">
                                 @foreach($orders as $order)
                                     <tr class="hover:bg-slate-900/50 transition">
-                                        <td class="py-2.5 px-3 font-bold text-white">{{ $order->order_number }}</td>
-                                        <td class="py-2.5 px-3 text-slate-400">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="py-2.5 px-3 font-bold text-white whitespace-nowrap">{{ $order->order_number }}</td>
+                                        <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap">{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                         <td class="py-2.5 px-3">{{ $order->user->name ?? 'Tamu' }}</td>
-                                        <td class="py-2.5 px-3 font-semibold">{{ ucfirst($order->status) }}</td>
-                                        <td class="py-2.5 px-3 font-semibold text-emerald-400">
+                                        <td class="py-2.5 px-3 font-semibold whitespace-nowrap">{{ ucfirst($order->status) }}</td>
+                                        <td class="py-2.5 px-3 font-semibold text-emerald-400 whitespace-nowrap">
                                             {{ $order->payment ? ucfirst($order->payment->status) : '-' }}
                                         </td>
-                                        <td class="py-2.5 px-3 font-bold text-cyan-400 text-right">
+                                        <td class="py-2.5 px-3 font-bold text-cyan-400 text-right whitespace-nowrap">
                                             Rp {{ number_format($order->total_price, 0, ',', '.') }}
                                         </td>
                                     </tr>

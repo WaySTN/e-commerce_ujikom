@@ -151,29 +151,29 @@
     <!-- ======================================================= -->
     <div class="screen-only">
         <!-- Top Action Bar -->
-        <div class="no-print flex items-center justify-between mb-6">
+        <div class="no-print flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6">
             <a href="{{ route('admin.pesanan.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition">
                 ← Kembali ke Daftar Pesanan
             </a>
 
-            <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
+            <button type="button" onclick="window.print()" class="inline-flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm">
                 <span>🖨️</span> Cetak Struk / Invoice
             </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <!-- Order & Items Detail (Left Column) -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Order Summary Card -->
-                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-4">
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 sm:p-8 shadow-xl space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-2">
                         <div>
                             <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider block">No. Invoice</span>
-                            <h2 class="text-2xl font-extrabold text-white">{{ $order->order_number }}</h2>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-white">{{ $order->order_number }}</h2>
                             <span class="text-xs text-slate-400 block mt-0.5">Tanggal: {{ $order->created_at->format('d M Y, H:i') }} WIB</span>
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-left sm:text-right">
                             <span class="text-xs text-slate-400 block font-medium">Customer</span>
                             <span class="font-bold text-white text-base block">{{ $order->user->name }}</span>
                             <span class="text-xs text-slate-400">{{ $order->user->email }}</span>
@@ -193,14 +193,14 @@
                 </div>
 
                 <!-- Items List -->
-                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-                    <h3 class="font-extrabold text-white text-lg border-b border-slate-800 pb-4 mb-4">
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 sm:p-8 shadow-xl">
+                    <h3 class="font-extrabold text-white text-base sm:text-lg border-b border-slate-800 pb-4 mb-4">
                         Item Produk Pesanan
                     </h3>
 
                     <div class="space-y-4">
                         @foreach($order->items as $item)
-                            <div class="flex items-center justify-between pb-4 border-b border-slate-800 last:border-b-0 last:pb-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 last:border-b-0 last:pb-0 gap-3">
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 bg-slate-900 rounded-xl overflow-hidden flex-shrink-0 border border-slate-800">
                                         @if($item->product && $item->product->image)
@@ -217,7 +217,7 @@
                                     </div>
                                 </div>
 
-                                <span class="font-extrabold text-sm text-cyan-400">
+                                <span class="font-extrabold text-sm text-cyan-400 sm:text-right">
                                     Rp {{ number_format($item->subtotal, 0, ',', '.') }}
                                 </span>
                             </div>
@@ -229,8 +229,8 @@
             <!-- Order Controls & Verification (Right Column) -->
             <div class="space-y-6">
                 <!-- Order Status Update Box -->
-                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                    <h3 class="font-extrabold text-white text-lg border-b border-slate-800 pb-3 flex items-center gap-2">
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
+                    <h3 class="font-extrabold text-white text-base sm:text-lg border-b border-slate-800 pb-3 flex items-center gap-2">
                         <span>📦</span> Status Pesanan
                     </h3>
 
@@ -266,8 +266,8 @@
                 </div>
 
                 <!-- Payment Verification Box -->
-                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-                    <h3 class="font-extrabold text-white text-lg border-b border-slate-800 pb-3 flex items-center gap-2">
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
+                    <h3 class="font-extrabold text-white text-base sm:text-lg border-b border-slate-800 pb-3 flex items-center gap-2">
                         <span>💳</span> Verifikasi Pembayaran
                     </h3>
 
@@ -300,7 +300,7 @@
                         @endif
 
                         <!-- Verification Buttons Form -->
-                        <div class="pt-4 border-t border-slate-800 flex gap-3">
+                        <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row gap-3">
                             <form method="POST" action="{{ route('admin.pesanan.verifikasi-bayar', $order->id) }}" class="flex-1" onsubmit="event.preventDefault(); confirmPayment(this, 'LUNAS');">
                                 @csrf
                                 @method('PATCH')

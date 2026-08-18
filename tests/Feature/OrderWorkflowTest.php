@@ -165,13 +165,35 @@ class OrderWorkflowTest extends TestCase
     {
         $admin = User::where('role', 'admin')->first();
 
-        $response = $this->actingAs($admin)->get(route('admin.laporan.index', [
+        // 1. Short range (<= 60 days, daily aggregation)
+        $responseShort = $this->actingAs($admin)->get(route('admin.laporan.index', [
             'start_date' => now()->subDays(7)->toDateString(),
             'end_date' => now()->toDateString(),
         ]));
 
-        $response->assertStatus(200);
-        $response->assertSee('Laporan Penjualan Toko');
-        $response->assertSee('Total Pendapatan Lunas');
+        $responseShort->assertStatus(200);
+        $responseShort->assertSee('Laporan Penjualan Toko');
+        $responseShort->assertSee('Grafik Pendapatan Harian');
+        $responseShort->assertViewHas('chartLabels', fn($labels) => count($labels) === 8);
+
+        // 2. Long range (> 60 days, e.g. 134 days, monthly aggregation)
+        $responseLong = $this->actingAs($admin)->get(route('admin.laporan.index', [
+            'start_date' => now()->subMonths(4)->startOfMonth()->toDateString(),
+            'end_date' => now()->toDateString(),
+        ]));
+
+        $responseLong->assertStatus(200);
+        $responseLong->assertSee('Grafik Pendapatan Bulanan');
+        $responseLong->assertViewHas('chartPeriodType', 'bulanan');
+        $responseLong->assertViewHas('chartLabels', fn($labels) => count($labels) >= 4);
+
+        // 3. Inverted/Swapped dates (start > end) safely normalized
+        $responseInverted = $this->actingAs($admin)->get(route('admin.laporan.index', [
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->subDays(10)->toDateString(),
+        ]));
+
+        $responseInverted->assertStatus(200);
+        $responseInverted->assertViewHas('chartLabels');
     }
 }

@@ -21,45 +21,57 @@
         body { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex">
+<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex flex-col lg:flex-row">
 
-    <!-- Fixed Sidebar (Tidak tergeser saat scroll) -->
-    <aside class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between fixed top-0 left-0 bottom-0 z-50 h-screen overflow-y-auto">
+    <!-- Mobile Overlay Backdrop -->
+    <div id="sidebar-backdrop" onclick="closeAdminSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden transition-opacity duration-300 lg:hidden"></div>
+
+    <!-- Responsive Drawer Sidebar -->
+    <aside id="admin-sidebar" class="w-64 bg-slate-950 border-r border-slate-800 flex flex-col justify-between fixed top-0 left-0 bottom-0 z-50 h-screen overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
         <div>
-            <!-- Sidebar Brand (Klik logo langsung ke Halaman Utama Toko) -->
-            <a href="{{ route('home') }}" class="h-16 flex items-center px-5 border-b border-slate-800 gap-3 group hover:bg-slate-900/50 transition">
-                <img src="{{ asset('images/logo.png') }}" alt="Wahyu Gadget Pedia" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
-                <div>
-                    <h1 class="font-extrabold text-sm text-white tracking-wide">Wahyu Gadget</h1>
-                    <p class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest">Admin Control Panel</p>
-                </div>
-            </a>
+            <!-- Sidebar Header & Brand -->
+            <div class="h-16 flex items-center justify-between px-5 border-b border-slate-800">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/logo.png') }}" alt="Wahyu Gadget Pedia" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div>
+                        <h1 class="font-extrabold text-sm text-white tracking-wide">Wahyu Gadget</h1>
+                        <p class="text-[9px] text-cyan-400 font-bold uppercase tracking-widest">Admin Control Panel</p>
+                    </div>
+                </a>
+
+                <!-- Close Button (Mobile Only) -->
+                <button type="button" onclick="closeAdminSidebar()" class="lg:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-900 transition" aria-label="Tutup Menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
 
             <!-- Sidebar Navigation -->
             <nav class="px-4 py-6 space-y-1.5">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
+                <a href="{{ route('admin.dashboard') }}" onclick="closeAdminSidebar()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
                     <span>📊</span> Dashboard Analisa
                 </a>
 
-                <a href="{{ route('admin.kategori.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.kategori.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
+                <a href="{{ route('admin.kategori.index') }}" onclick="closeAdminSidebar()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.kategori.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
                     <span>🏷️</span> Kelola Kategori
                 </a>
 
-                <a href="{{ route('admin.produk.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.produk.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
+                <a href="{{ route('admin.produk.index') }}" onclick="closeAdminSidebar()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.produk.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
                     <span>📦</span> Kelola Produk
                 </a>
 
-                <a href="{{ route('admin.pesanan.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.pesanan.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
+                <a href="{{ route('admin.pesanan.index') }}" onclick="closeAdminSidebar()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.pesanan.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
                     <span>🛒</span> Kelola Order
                 </a>
 
-                <a href="{{ route('admin.laporan.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.laporan.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
+                <a href="{{ route('admin.laporan.index') }}" onclick="closeAdminSidebar()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('admin.laporan.*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-bold' : 'text-slate-400 hover:bg-slate-900 hover:text-white' }}">
                     <span>📈</span> Laporan Penjualan
                 </a>
             </nav>
         </div>
 
-        <!-- Sidebar Bottom Actions (Lihat Toko & Tombol Keluar) -->
+        <!-- Sidebar Bottom Actions -->
         <div class="p-4 border-t border-slate-800 space-y-2 bg-slate-950">
             <a href="{{ route('home') }}" class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-800 transition">
                 <span>🌐</span> Lihat Toko Storefront
@@ -74,65 +86,100 @@
         </div>
     </aside>
 
-    <!-- Main Wrapper (Dengan padding-left ml-64 untuk menampung fixed sidebar) -->
-    <div class="flex-1 flex flex-col min-w-0 pl-64">
+    <!-- Main Content Wrapper (pl-0 on mobile, lg:pl-64 on desktop) -->
+    <div class="flex-1 flex flex-col min-w-0 lg:pl-64 w-full">
         <!-- Top Bar Header -->
-        <header class="h-16 bg-slate-950/80 backdrop-blur border-b border-slate-800 px-8 flex items-center justify-between sticky top-0 z-40">
-            <div class="flex items-center gap-4">
-                <h2 class="font-bold text-lg text-white">{{ $header ?? 'Dashboard Analisa' }}</h2>
+        <header class="h-16 bg-slate-950/80 backdrop-blur border-b border-slate-800 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+            <!-- Left Header: Mobile Toggle & Page Title -->
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 text-slate-300 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Buka Menu Admin">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <h2 class="font-bold text-sm sm:text-lg text-white truncate">{{ $header ?? 'Dashboard Analisa' }}</h2>
             </div>
 
-            <!-- Profile Action Button -->
-            <div class="flex items-center gap-4">
-                <a href="{{ route('profile.edit') }}" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-xl border border-slate-700 font-bold transition flex items-center gap-2 shadow-sm">
-                    <span>👤</span> Profil: {{ auth()->user()->name }}
+            <!-- Right Header: Profile Action Button -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <a href="{{ route('profile.edit') }}" class="text-xs bg-slate-900 hover:bg-slate-800 text-slate-200 px-3 py-2 rounded-xl border border-slate-800 font-bold transition flex items-center gap-1.5 sm:gap-2 shadow-sm">
+                    <span>👤</span>
+                    <span class="hidden sm:inline">Profil: </span>
+                    <span class="max-w-[100px] sm:max-w-[150px] truncate">{{ auth()->user()->name }}</span>
                 </a>
             </div>
         </header>
 
-        <!-- Page Content -->
-        <main class="p-8 flex-1">
+        <!-- Page Content Container -->
+        <main class="p-4 sm:p-6 lg:p-8 flex-1">
             {{ $slot }}
         </main>
     </div>
 
     <!-- Image Cropper Modal Component -->
     <div id="cropper-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-950/80 backdrop-blur p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-white text-base flex items-center gap-2">
-                    <span>✂️</span> Potong & Sesuaikan Foto Produk (1:1 Square)
+                <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+                    <span>✂️</span> Potong & Sesuaikan Foto (1:1)
                 </h3>
                 <button type="button" onclick="closeCropperModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
             </div>
 
             <!-- Cropper Image Target Container -->
-            <div class="h-80 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center p-2">
+            <div class="h-64 sm:h-80 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center p-2">
                 <img id="cropper-target-img" class="max-h-full max-w-full block">
             </div>
 
             <!-- Cropper Action Controls -->
-            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
-                <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="cropperInstance && cropperInstance.zoom(0.1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold" title="Perbesar">🔍 +</button>
-                    <button type="button" onclick="cropperInstance && cropperInstance.zoom(-0.1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold" title="Perkecil">🔍 -</button>
-                    <button type="button" onclick="cropperInstance && cropperInstance.rotate(-90)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold" title="Putar Kiri">🔄 -90°</button>
-                    <button type="button" onclick="cropperInstance && cropperInstance.rotate(90)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold" title="Putar Kanan">🔄 +90°</button>
-                    <button type="button" onclick="cropperInstance && cropperInstance.reset()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold" title="Reset">⏮️ Reset</button>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+                <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                    <button type="button" onclick="cropperInstance && cropperInstance.zoom(0.1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Perbesar">🔍 +</button>
+                    <button type="button" onclick="cropperInstance && cropperInstance.zoom(-0.1)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Perkecil">🔍 -</button>
+                    <button type="button" onclick="cropperInstance && cropperInstance.rotate(-90)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Putar Kiri">🔄 -90°</button>
+                    <button type="button" onclick="cropperInstance && cropperInstance.rotate(90)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Putar Kanan">🔄 +90°</button>
+                    <button type="button" onclick="cropperInstance && cropperInstance.reset()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg text-xs font-bold" title="Reset">⏮️ Reset</button>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="closeCropperModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs px-4 py-2.5 rounded-xl">Batal</button>
-                    <button type="button" onclick="applyCroppedImage()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-1.5">
-                        <span>✂️</span> Potong & Gunakan
+                <div class="flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeCropperModal()" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs px-4 py-2.5 rounded-xl text-center">Batal</button>
+                    <button type="button" onclick="applyCroppedImage()" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-1.5">
+                        <span>✂️</span> Gunakan
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SweetAlert2 Scripts & Global Confirmation Handlers -->
+    <!-- Responsive Drawer JS, SweetAlert2 Scripts & Handlers -->
     <script>
+        // Responsive Sidebar Drawer Controller
+        function toggleAdminSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openAdminSidebar();
+            } else {
+                closeAdminSidebar();
+            }
+        }
+
+        function openAdminSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            sidebar.classList.remove('-translate-x-full');
+            backdrop.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
+        }
+
+        function closeAdminSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
+        }
+
         // Toast Notification System
         const Toast = Swal.mixin({
             toast: true,

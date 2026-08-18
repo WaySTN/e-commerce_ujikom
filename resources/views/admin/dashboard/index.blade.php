@@ -2,85 +2,85 @@
     <x-slot name="header">Dashboard Analisa Bisnis & Penjualan</x-slot>
 
     <!-- Top KPI Stat Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <!-- Total Revenue Lunas -->
-        <div class="bg-slate-950 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
+        <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
             <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Pendapatan Lunas</span>
-                <span class="text-2xl font-extrabold text-emerald-400 mt-1 block">
+                <span class="text-[11px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Pendapatan Lunas</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-emerald-400 mt-1 block">
                     Rp {{ number_format($totalRevenue, 0, ',', '.') }}
                 </span>
-                <span class="text-[11px] text-slate-500 block mt-1">Terverifikasi dari order lunas</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 block mt-1">Terverifikasi dari order lunas</span>
             </div>
-            <div class="bg-emerald-600/20 text-emerald-400 p-3.5 rounded-2xl border border-emerald-500/30 text-2xl">
+            <div class="bg-emerald-600/20 text-emerald-400 p-3 sm:p-3.5 rounded-2xl border border-emerald-500/30 text-xl sm:text-2xl">
                 💰
             </div>
         </div>
 
         <!-- Revenue This Month -->
-        <div class="bg-slate-950 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
+        <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
             <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Pendapatan Bulan Ini</span>
-                <span class="text-2xl font-extrabold text-blue-400 mt-1 block">
+                <span class="text-[11px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider block">Pendapatan Bulan Ini</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-blue-400 mt-1 block">
                     Rp {{ number_format($revenueThisMonth, 0, ',', '.') }}
                 </span>
-                <span class="text-[11px] text-slate-500 block mt-1">{{ now()->translatedFormat('F Y') }}</span>
+                <span class="text-[10px] sm:text-[11px] text-slate-500 block mt-1">{{ now()->translatedFormat('F Y') }}</span>
             </div>
-            <div class="bg-blue-600/20 text-blue-400 p-3.5 rounded-2xl border border-blue-500/30 text-2xl">
+            <div class="bg-blue-600/20 text-blue-400 p-3 sm:p-3.5 rounded-2xl border border-blue-500/30 text-xl sm:text-2xl">
                 📈
             </div>
         </div>
 
         <!-- Total & Pending Orders -->
-        <div class="bg-slate-950 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
+        <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
             <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Pesanan</span>
-                <span class="text-2xl font-extrabold text-white mt-1 block">
+                <span class="text-[11px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider block">Total Pesanan</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-white mt-1 block">
                     {{ number_format($totalOrders) }} <span class="text-xs font-semibold text-slate-400">Order</span>
                 </span>
-                <span class="text-[11px] text-amber-400 font-semibold block mt-1">
+                <span class="text-[10px] sm:text-[11px] text-amber-400 font-semibold block mt-1">
                     ⚡ {{ number_format($pendingOrders) }} Order Pending
                 </span>
             </div>
-            <div class="bg-amber-600/20 text-amber-400 p-3.5 rounded-2xl border border-amber-500/30 text-2xl">
+            <div class="bg-amber-600/20 text-amber-400 p-3 sm:p-3.5 rounded-2xl border border-amber-500/30 text-xl sm:text-2xl">
                 🛒
             </div>
         </div>
 
         <!-- Total Products & Low Stock Warning -->
-        <div class="bg-slate-950 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
+        <div class="bg-slate-950 border border-slate-800 p-4 sm:p-6 rounded-3xl flex items-center justify-between shadow-xl relative overflow-hidden group">
             <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Katalog Produk</span>
-                <span class="text-2xl font-extrabold text-cyan-400 mt-1 block">
+                <span class="text-[11px] sm:text-xs text-slate-400 font-semibold uppercase tracking-wider block">Katalog Produk</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-cyan-400 mt-1 block">
                     {{ number_format($totalProducts) }} <span class="text-xs font-semibold text-slate-400">Item</span>
                 </span>
                 @if($lowStockProducts->count() > 0)
-                    <span class="text-[11px] text-rose-400 font-semibold block mt-1">
+                    <span class="text-[10px] sm:text-[11px] text-rose-400 font-semibold block mt-1">
                         ⚠️ {{ $lowStockProducts->count() }} Stok Menipis
                     </span>
                 @else
-                    <span class="text-[11px] text-emerald-400 font-semibold block mt-1">
+                    <span class="text-[10px] sm:text-[11px] text-emerald-400 font-semibold block mt-1">
                         ✅ Stok Aman
                     </span>
                 @endif
             </div>
-            <div class="bg-cyan-600/20 text-cyan-400 p-3.5 rounded-2xl border border-cyan-500/30 text-2xl">
+            <div class="bg-cyan-600/20 text-cyan-400 p-3 sm:p-3.5 rounded-2xl border border-cyan-500/30 text-xl sm:text-2xl">
                 📦
             </div>
         </div>
     </div>
 
-    <!-- Interactive Charts Section (Permintaan Khusus Asesor BNSP) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Interactive Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <!-- 7-Day Revenue Trend Line/Area Chart -->
-        <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+        <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
             <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-800 pb-4 mb-4">
                 <div>
-                    <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                    <h3 class="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
                         <span>📈</span> Tren Pendapatan 7 Hari Terakhir
                     </h3>
                     <p class="text-xs text-slate-400 mt-0.5">Grafik dinamika omset harian transaksi terverifikasi LUNAS</p>
@@ -89,21 +89,21 @@
                     Aktif & Realtime
                 </span>
             </div>
-            <div class="h-72 w-full relative">
+            <div class="h-64 sm:h-72 w-full relative">
                 <canvas id="revenueTrendChart"></canvas>
             </div>
         </div>
 
         <!-- Category Sales Distribution Doughnut Chart -->
-        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl flex flex-col justify-between">
             <div>
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
-                    <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                    <h3 class="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
                         <span>🏷️</span> Penjualan Kategori
                     </h3>
                     <span class="text-xs text-slate-400 font-semibold">Distribusi Qty</span>
                 </div>
-                <div class="h-60 w-full relative flex items-center justify-center">
+                <div class="h-56 sm:h-60 w-full relative flex items-center justify-center">
                     <canvas id="categorySalesChart"></canvas>
                 </div>
             </div>
@@ -114,20 +114,20 @@
     </div>
 
     <!-- Analytics Breakdown Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <!-- Order Status Breakdown Widget -->
-        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                <h3 class="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
                     <span>📊</span> Analisa Status Pesanan
                 </h3>
-                <span class="text-xs text-slate-400 font-semibold">{{ $totalOrders }} Total Transaksi</span>
+                <span class="text-xs text-slate-400 font-semibold">{{ $totalOrders }} Total</span>
             </div>
 
             <div class="space-y-4">
                 @php
                     $statusConfig = [
-                        'pending' => ['label' => 'Pending (Menunggu Admin)', 'color' => 'bg-amber-500', 'text' => 'text-amber-400'],
+                        'pending' => ['label' => 'Pending (Menunggu)', 'color' => 'bg-amber-500', 'text' => 'text-amber-400'],
                         'diproses' => ['label' => 'Diproses Admin', 'color' => 'bg-blue-500', 'text' => 'text-blue-400'],
                         'dikirim' => ['label' => 'Sedang Dikirim', 'color' => 'bg-cyan-500', 'text' => 'text-cyan-400'],
                         'selesai' => ['label' => 'Selesai', 'color' => 'bg-emerald-500', 'text' => 'text-emerald-400'],
@@ -154,14 +154,14 @@
         </div>
 
         <!-- Payment Status Breakdown Widget -->
-        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
-                <h3 class="font-extrabold text-white text-base flex items-center gap-2">
+                <h3 class="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
                     <span>💳</span> Analisa Status Pembayaran
                 </h3>
                 @if($pendingPayments > 0)
                     <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full font-bold animate-pulse">
-                        ⚡ {{ $pendingPayments }} Butuh Verifikasi
+                        ⚡ {{ $pendingPayments }} Verifikasi
                     </span>
                 @endif
             </div>
@@ -170,7 +170,7 @@
                 @php
                     $totalPayments = array_sum($paymentStatusCounts);
                     $paymentConfig = [
-                        'menunggu' => ['label' => 'Menunggu Verifikasi Admin', 'color' => 'bg-amber-500', 'text' => 'text-amber-400'],
+                        'menunggu' => ['label' => 'Menunggu Verifikasi', 'color' => 'bg-amber-500', 'text' => 'text-amber-400'],
                         'lunas' => ['label' => 'Pembayaran LUNAS', 'color' => 'bg-emerald-500', 'text' => 'text-emerald-400'],
                         'ditolak' => ['label' => 'Pembayaran Ditolak', 'color' => 'bg-rose-500', 'text' => 'text-rose-400'],
                     ];
@@ -196,10 +196,10 @@
     </div>
 
     <!-- Low Stock Alert & Top Selling Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <!-- Low Stock Alert Widget -->
-        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
-            <h3 class="font-extrabold text-white text-base border-b border-slate-800 pb-4 mb-4 flex items-center justify-between">
+        <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
+            <h3 class="font-extrabold text-white text-sm sm:text-base border-b border-slate-800 pb-4 mb-4 flex items-center justify-between">
                 <span class="flex items-center gap-2">⚠️ Peringatan Stok Menipis</span>
                 <span class="text-xs bg-rose-500/20 text-rose-300 px-2.5 py-0.5 rounded-full font-bold border border-rose-500/30">
                     <= 5 Unit
@@ -215,12 +215,12 @@
             @else
                 <div class="space-y-3">
                     @foreach($lowStockProducts as $low)
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-800 last:border-b-0 text-xs">
-                            <div class="max-w-[70%]">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800 last:border-b-0 text-xs gap-2">
+                            <div class="min-w-0 flex-1">
                                 <span class="font-bold text-white block truncate">{{ $low->name }}</span>
-                                <span class="text-slate-400 text-[11px]">{{ $low->category->name ?? '-' }}</span>
+                                <span class="text-slate-400 text-[11px] block truncate">{{ $low->category->name ?? '-' }}</span>
                             </div>
-                            <div class="text-right">
+                            <div class="text-right flex-shrink-0">
                                 <span class="font-extrabold text-rose-400 block">{{ $low->stock }} unit</span>
                                 <a href="{{ route('admin.produk.edit', $low->id) }}" class="text-[10px] text-cyan-400 hover:underline font-semibold">
                                     Tambah Stok ➔
@@ -233,8 +233,8 @@
         </div>
 
         <!-- Top 5 Selling Products Widget -->
-        <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
-            <h3 class="font-extrabold text-white text-base border-b border-slate-800 pb-4 mb-4 flex items-center gap-2">
+        <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
+            <h3 class="font-extrabold text-white text-sm sm:text-base border-b border-slate-800 pb-4 mb-4 flex items-center gap-2">
                 <span>🔥</span> Top 5 Produk Terlaris
             </h3>
 
@@ -242,7 +242,7 @@
                 <p class="text-xs text-slate-500 text-center py-8">Belum ada data produk terpesan.</p>
             @else
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
+                    <table class="w-full text-left text-xs text-slate-300 min-w-[450px]">
                         <thead class="text-slate-400 uppercase bg-slate-900 border-b border-slate-800">
                             <tr>
                                 <th class="py-3 px-4">Peringkat</th>
@@ -274,13 +274,13 @@
     </div>
 
     <!-- Recent Orders Section -->
-    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-            <h3 class="font-extrabold text-lg text-white flex items-center gap-2">
+            <h3 class="font-extrabold text-sm sm:text-lg text-white flex items-center gap-2">
                 <span>⏱️</span> Pesanan Terbaru Masuk
             </h3>
             <a href="{{ route('admin.pesanan.index') }}" class="text-xs font-bold text-cyan-400 hover:underline">
-                Lihat Semua Pesanan ➔
+                Lihat Semua ➔
             </a>
         </div>
 
@@ -288,7 +288,7 @@
             <p class="text-sm text-slate-500 text-center py-6">Belum ada pesanan masuk.</p>
         @else
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
+                <table class="w-full text-left text-sm text-slate-300 min-w-[600px]">
                     <thead class="text-xs text-slate-400 uppercase bg-slate-900 border-b border-slate-800">
                         <tr>
                             <th class="py-3 px-4">No. Invoice</th>
@@ -301,7 +301,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-800">
                         @foreach($recentOrders as $order)
-                            <tr class="hover:bg-slate-900/50 transition">
+                            <tr class="hover:bg-slate-900/50 transition text-xs sm:text-sm">
                                 <td class="py-3 px-4 font-bold text-white">{{ $order->order_number }}</td>
                                 <td class="py-3 px-4">{{ $order->user->name ?? 'Tamu' }}</td>
                                 <td class="py-3 px-4 font-bold text-cyan-400">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
@@ -318,7 +318,7 @@
                                     @endif
                                 </td>
                                 <td class="py-3 px-4 text-right">
-                                    <a href="{{ route('admin.pesanan.show', $order->id) }}" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-blue-600/30">
+                                    <a href="{{ route('admin.pesanan.show', $order->id) }}" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-md shadow-blue-600/30 whitespace-nowrap">
                                         Detail & Verifikasi
                                     </a>
                                 </td>
@@ -328,6 +328,8 @@
                 </table>
             </div>
         @endif
+    </div>
+
     <!-- Chart.js Scripts Initialization -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -419,7 +421,7 @@
                         scales: {
                             x: {
                                 grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                                ticks: { color: '#94a3b8', font: { family: "'Outfit', sans-serif", size: 11 } }
+                                ticks: { color: '#94a3b8', font: { family: "'Outfit', sans-serif", size: 10 } }
                             },
                             y: {
                                 type: 'linear',

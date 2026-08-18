@@ -2,12 +2,12 @@
     <x-slot name="header">Kelola Pesanan Customer</x-slot>
 
     <!-- Filters Bar -->
-    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl mb-6">
-        <form method="GET" action="{{ route('admin.pesanan.index') }}" class="flex flex-wrap gap-4 items-center">
-            <div>
+    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl mb-6">
+        <form method="GET" action="{{ route('admin.pesanan.index') }}" class="flex flex-col sm:flex-row flex-wrap gap-4 items-stretch sm:items-end">
+            <div class="flex-1 sm:flex-initial">
                 <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Filter Status Order</label>
                 <select name="status" onchange="this.form.submit()"
-                    class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2 px-3 focus:ring-2 focus:ring-blue-500">
+                    class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status Order</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
@@ -17,10 +17,10 @@
                 </select>
             </div>
 
-            <div>
+            <div class="flex-1 sm:flex-initial">
                 <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Filter Status Bayar</label>
                 <select name="payment_status" onchange="this.form.submit()"
-                    class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2 px-3 focus:ring-2 focus:ring-blue-500">
+                    class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-white text-xs rounded-xl py-2.5 px-3 focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Status Pembayaran</option>
                     <option value="menunggu" {{ request('payment_status') == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
                     <option value="lunas" {{ request('payment_status') == 'lunas' ? 'selected' : '' }}>Lunas</option>
@@ -29,20 +29,22 @@
             </div>
 
             @if(request('status') || request('payment_status'))
-                <a href="{{ route('admin.pesanan.index') }}" class="mt-4 text-xs font-semibold text-cyan-400 hover:underline">
-                    Reset Filter
-                </a>
+                <div class="pb-1">
+                    <a href="{{ route('admin.pesanan.index') }}" class="text-xs font-semibold text-cyan-400 hover:underline">
+                        Reset Filter
+                    </a>
+                </div>
             @endif
         </form>
     </div>
 
     <!-- Orders Table -->
-    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
         @if($orders->isEmpty())
             <p class="text-sm text-slate-500 text-center py-6">Tidak ada data pesanan ditemukan.</p>
         @else
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
+                <table class="w-full text-left text-xs sm:text-sm text-slate-300 min-w-[680px]">
                     <thead class="text-xs text-slate-400 uppercase bg-slate-900 border-b border-slate-800">
                         <tr>
                             <th class="py-3 px-4">No. Invoice</th>
@@ -57,11 +59,11 @@
                     <tbody class="divide-y divide-slate-800">
                         @foreach($orders as $order)
                             <tr class="hover:bg-slate-900/50 transition">
-                                <td class="py-3 px-4 font-bold text-white">{{ $order->order_number }}</td>
+                                <td class="py-3 px-4 font-bold text-white whitespace-nowrap">{{ $order->order_number }}</td>
                                 <td class="py-3 px-4">{{ $order->user->name ?? 'Tamu' }}</td>
-                                <td class="py-3 px-4 text-xs text-slate-400">{{ $order->created_at->format('d M Y, H:i') }}</td>
-                                <td class="py-3 px-4 font-bold text-cyan-400">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 text-xs text-slate-400 whitespace-nowrap">{{ $order->created_at->format('d M Y, H:i') }}</td>
+                                <td class="py-3 px-4 font-bold text-cyan-400 whitespace-nowrap">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                <td class="py-3 px-4 whitespace-nowrap">
                                     @php
                                         $statusColors = [
                                             'pending' => 'bg-amber-500/10 text-amber-400 border-amber-500/30',
@@ -75,7 +77,7 @@
                                         {{ ucfirst($order->status) }}
                                     </span>
                                 </td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4 whitespace-nowrap">
                                     @if($order->payment)
                                         @php
                                             $payColors = [
@@ -89,8 +91,8 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="py-3 px-4 text-right">
-                                    <a href="{{ route('admin.pesanan.show', $order->id) }}" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg transition">
+                                <td class="py-3 px-4 text-right whitespace-nowrap">
+                                    <a href="{{ route('admin.pesanan.show', $order->id) }}" class="inline-block text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-sm">
                                         Detail & Verifikasi
                                     </a>
                                 </td>

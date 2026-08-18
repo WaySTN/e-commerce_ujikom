@@ -2,13 +2,13 @@
     <x-slot name="header">Kelola Produk Aksesori</x-slot>
 
     <!-- Top Action & Search -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-        <form method="GET" action="{{ route('admin.produk.index') }}" class="flex flex-wrap gap-3 flex-1">
+    <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-6">
+        <form method="GET" action="{{ route('admin.produk.index') }}" class="flex flex-col sm:flex-row flex-wrap gap-3 flex-1 w-full">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama produk..."
-                class="bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500 w-60">
+                class="bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500 w-full sm:w-60">
 
             <select name="category_id" onchange="this.form.submit()"
-                class="bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500">
+                class="bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-xl py-2.5 px-4 focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
                 <option value="">Semua Kategori</option>
                 @foreach($categories as $cat)
                     <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
@@ -17,26 +17,33 @@
                 @endforeach
             </select>
 
-            <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2.5 rounded-xl transition">
-                Cari
-            </button>
+            <div class="flex items-center gap-2">
+                <button type="submit" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2.5 rounded-xl transition text-center">
+                    Cari
+                </button>
+                @if(request('search') || request('category_id'))
+                    <a href="{{ route('admin.produk.index') }}" class="text-xs font-semibold text-cyan-400 hover:underline px-2">
+                        Reset
+                    </a>
+                @endif
+            </div>
         </form>
 
-        <a href="{{ route('admin.produk.create') }}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center gap-2">
+        <a href="{{ route('admin.produk.create') }}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 w-full sm:w-auto flex-shrink-0">
             <span>➕</span> Tambah Produk Baru
         </a>
     </div>
 
     <!-- Products Table -->
-    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl">
+    <div class="bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl">
         @if($products->isEmpty())
             <p class="text-sm text-slate-500 text-center py-6">Belum ada produk ditambahkan.</p>
         @else
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
+                <table class="w-full text-left text-xs sm:text-sm text-slate-300 min-w-[650px]">
                     <thead class="text-xs text-slate-400 uppercase bg-slate-900 border-b border-slate-800">
                         <tr>
-                            <th class="py-3 px-4">Gambar</th>
+                            <th class="py-3 px-4 w-16">Gambar</th>
                             <th class="py-3 px-4">Nama Produk</th>
                             <th class="py-3 px-4">Kategori</th>
                             <th class="py-3 px-4">Harga</th>
@@ -49,7 +56,7 @@
                         @foreach($products as $product)
                             <tr class="hover:bg-slate-900/50 transition">
                                 <td class="py-3 px-4">
-                                    <div class="w-12 h-12 bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+                                    <div class="w-12 h-12 bg-slate-900 rounded-xl overflow-hidden border border-slate-800 flex-shrink-0">
                                         @if($product->image)
                                             <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">
                                         @else
@@ -70,8 +77,8 @@
                                         {{ $product->is_active ? 'Aktif' : 'Non-Aktif' }}
                                     </span>
                                 </td>
-                                <td class="py-3 px-4 text-right space-x-2">
-                                    <a href="{{ route('admin.produk.edit', $product->id) }}" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
+                                <td class="py-3 px-4 text-right whitespace-nowrap space-x-1.5 sm:space-x-2">
+                                    <a href="{{ route('admin.produk.edit', $product->id) }}" class="inline-block text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg transition font-semibold">
                                         Edit
                                     </a>
                                     <form method="POST" action="{{ route('admin.produk.destroy', $product->id) }}" class="inline-block" onsubmit="event.preventDefault(); confirmDelete(this, 'produk {{ addslashes($product->name) }}');">

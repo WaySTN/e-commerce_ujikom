@@ -1,8 +1,8 @@
 <x-admin-layout>
     <x-slot name="header">Tambah Produk Aksesori Baru</x-slot>
 
-    <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
-        <h3 class="font-bold text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Tambah Produk</h3>
+    <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-4 sm:p-8 shadow-xl">
+        <h3 class="font-bold text-base sm:text-lg text-white mb-6 border-b border-slate-800 pb-3">Form Tambah Produk</h3>
 
         <form method="POST" action="{{ route('admin.produk.store') }}" enctype="multipart/form-data" class="space-y-5">
             @csrf
@@ -19,7 +19,7 @@
             </div>
 
             <!-- Category & Price Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                     <label for="category_id" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Kategori <span class="text-rose-500">*</span></label>
                     <select id="category_id" name="category_id" required
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Stock & Image Cropper Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                     <label for="stock" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Stok Awal <span class="text-rose-500">*</span></label>
                     <input type="number" id="stock" name="stock" value="{{ old('stock', 10) }}" min="0" required
@@ -72,7 +72,7 @@
             </div>
 
             <!-- Cropped Image Live Preview -->
-            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-4">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div class="w-20 h-20 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center flex-shrink-0">
                     <img id="cropped-preview-img" class="w-full h-full object-cover hidden">
                     <span id="preview-placeholder" class="text-slate-600 text-xs text-center p-1">No Image</span>
